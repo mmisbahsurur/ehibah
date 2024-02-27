@@ -8,6 +8,9 @@ use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\HibahController;
 use App\Http\Controllers\JenisHibahController;
 use App\Http\Controllers\DependController;
+use App\Http\Controllers\MkecamatanController;
+use App\Http\Controllers\MkotaController;
+
 /*
 
 
@@ -34,6 +37,12 @@ Route::get('/kota', function () {
 Route::get('/kecamatan', function () {
     return view('front-kecamatan');
 });
+Route::get('/select-kecamatan', [MkecamatanController::class, 'selectKecamatan'])->name('selectkecamatan');
+Route::get('/select-kota', [MkotaController::class, 'selectKota'])->name('selectkota');
+Route::get('/select-provinsi', [MkecamatanController::class, 'selectProvinsi'])->name('selectprovinsi');
+Route::post('data-kecamatan', [MkecamatanController::class, 'dataKecamatan'])->name('datakecamatan');
+Route::post('data-kota', [MkotaController::class, 'dataKota'])->name('datakota');
+Route::post('data-provinsi', [MkecamatanController::class, 'dataProvinsi'])->name('dataprovinsi');
 Auth::routes();
 
 /*------------------------------------------

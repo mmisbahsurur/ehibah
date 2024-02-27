@@ -10,4 +10,14 @@ class Mkota extends Model
     use HasFactory;
     protected $table = 'tbl_kota';
     protected $guarded = [];
+
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class, 'province_id', 'id');
+    }
+
+    public function kecamatan()
+    {
+        return $this->hasMany(Mkecamatan::class, 'regency_id', 'id');
+    }
 }

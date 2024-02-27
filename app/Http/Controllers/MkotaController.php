@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hibah;
+use App\Models\Kelompok;
 use App\Models\Mkota;
 use Illuminate\Http\Request;
 
@@ -81,5 +83,50 @@ class MkotaController extends Controller
     public function destroy(Mkota $mkota)
     {
         //
+    }
+
+    public function selectKota(Request $request)
+    {
+        $start = $request->page ? $request->page - 1 : 0;
+        $length = $request->limit;
+        $name = strtoupper($request->name);
+
+        
+        //Count Data
+        $query = Mkota::where('province_id', 33);
+        $query->whereRaw("upper(name) like '%$name%'");
+        $recordsTotal = $query->count();
+
+        //Select Pagination
+        $query = Mkota::where('province_id', 33);
+        $query->whereRaw("upper(name) like '%$name%'");
+        $query->offset($start*$length);
+        $query->limit($length);
+        $kota = $query->get();
+
+        $data = [];
+        foreach($kota as $k){
+			$data[] = $k;
+		}
+        return response()->json([
+			'total' => $recordsTotal,
+			'rows'  => $data
+        ], 200);
+    }
+
+    public function dataKota(Request $request)
+    {
+        $kelompok = Kelompok::with('mdesa', 'mkota', 'mkecamatan')
+            ->where('kota', $request->kota_id)
+            ->get();
+        $ids = [];
+        foreach ($kelompok as $k) {
+            $ids[] = $k->id;
+        }
+
+        $hibah = Hibah::with('poktan', 'jenis')
+            ->whereIn('id_kelompoktani', $ids)
+            ->get();
+        return response()->json($hibah, 200, [], JSON_PRETTY_PRINT);
     }
 }

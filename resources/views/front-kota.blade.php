@@ -2,6 +2,7 @@
 
 @push('plugin-styles')
 <link href="{{ asset('front/assets/plugins/datatables-net-bs5/dataTables.bootstrap5.css') }}" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 
 @section('content')
@@ -15,25 +16,25 @@
 <div class="col-md-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <form method="get">
-                <div class="row">
-                    <div class="col-12 mb-3">
-                        <div class="mb-3">
-                            <label  class="form-label">Kab/Kota</label>
-                            <select class="js-example-basic-single form-select" name="kabkota" data-width="100%" id="kotaDropdown" >
-                                <option value="">-- Pilih Lokasi --</option>
-
-                            </select>
-                        </div>
+          <form method="post" action="{{ route('datakota') }}"  >
+            @csrf
+            @method('post')
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <div class="mb-3">
+                        <label  class="form-label">Kota</label>
+                        <select class="form-control" name="kota_id" data-placeholder="Pilih Kota" id="kotaDropdown" >
+                        </select>
                     </div>
                 </div>
+            </div>
 
 
-                <button  name="filter" id="filter"  type="button" class="btn btn-primary btn-icon-text btn-xs" >
-                    <i class="btn-icon-prepend" data-feather="search"></i>
-                    Cari data
-                </button>
-            </form>
+            <button id="filter" type="submit" class="btn btn-primary btn-icon-text btn-xs" >
+                <i class="btn-icon-prepend" data-feather="search"></i>
+                Cari data
+            </button>
+        </form>
         </div>
     </div>
 </div>
@@ -70,8 +71,44 @@
 @push('plugin-scripts')
 <script src="{{ asset('front/assets/plugins/datatables-net/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('front/assets/plugins/datatables-net-bs5/dataTables.bootstrap5.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endpush
 
 @push('custom-scripts')
 <script src="{{ asset('front/assets/js/data-table.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $("#kotaDropdown").select2({
+            ajax: {
+                url: "{{ route('selectkota') }}",
+                type: 'GET',
+                dataType: 'json',
+                data: function(params) {
+                    return {
+                        name: params.term,
+                        page: params.page,
+                        limit: 30,
+                    };
+                },
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
+                    var option = [];
+                    $.each(data.rows, function(index, item) {
+                        option.push({
+                            id: item.id,
+                            text: `${item.name}`
+                        });
+                    });
+                    return {
+                        results: option,
+                        pagination: {
+                            more: (params.page * 30) < data.total
+                        },
+                    };
+                },
+            },
+            allowClear: true,
+        });
+    });
+</script>
 @endpush

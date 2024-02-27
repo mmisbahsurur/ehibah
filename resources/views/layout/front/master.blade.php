@@ -33,6 +33,8 @@ License: For each use you must have a valid license purchased only from above li
   <link href="{{ asset('front/assets/fonts/feather-font/css/iconfont.css') }}" rel="stylesheet" />
   <link href="{{ asset('front/assets/plugins/perfect-scrollbar/perfect-scrollbar.css') }}" rel="stylesheet" />
   <!-- end plugin css -->
+  {{-- Jquery --}}
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
   @stack('plugin-styles')
 

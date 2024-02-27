@@ -10,4 +10,9 @@ class Mdesa extends Model
     use HasFactory;
     protected $table = 'tbl_desa';
     protected $guarded = [];
+
+    public function kecamatan()
+    {
+        return $this->belongsTo(Mkecamatan::class, 'district_id', 'id');
+    }
 }
