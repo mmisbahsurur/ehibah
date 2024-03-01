@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hibah;
+use App\Models\JenisHibah;
 use App\Models\Kelompok;
+use App\Models\Mdesa;
 use App\Models\Mkecamatan;
 use App\Models\Mkota;
 use App\Models\Provinsi;
@@ -16,9 +18,26 @@ class MkecamatanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $jenis_hibahs = JenisHibah::all();
+
+        $countDesa = 0;
+        $desas = '';
+        if ($request->kecamatan) {
+            $desas = Mdesa::select("tbl_desa.*", "tbl_kota.id as idkot", "tbl_kota.name as namakot", "tbl_kecamatan.id as idkec", "tbl_kecamatan.name as namakec")
+                ->join("tbl_kecamatan", "tbl_kecamatan.id", "=", "tbl_desa.district_id")
+                ->join("tbl_kota", "tbl_kota.id", "=", "tbl_kecamatan.regency_id")
+                ->where("tbl_desa.district_id", $request->kecamatan)
+                ->orderBy("tbl_desa.name")
+                ->get();
+            $countDesa = $desas->count();
+        }
+        return view('front-kecamatan', compact(
+            'jenis_hibahs',
+            'countDesa',
+            'desas',
+        ));
     }
 
     /**

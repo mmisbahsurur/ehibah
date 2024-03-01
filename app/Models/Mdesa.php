@@ -15,4 +15,9 @@ class Mdesa extends Model
     {
         return $this->belongsTo(Mkecamatan::class, 'district_id', 'id');
     }
+
+    public function kelompoktani()
+    {
+        return $this->hasMany(Kelompok::class, 'desa', 'id');
+    }
 }

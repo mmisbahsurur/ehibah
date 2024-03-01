@@ -34,15 +34,13 @@ Route::get('/prov', function () {
 Route::get('/kota', function () {
     return view('front-kota');
 });
-Route::get('/kecamatan', function () {
-    return view('front-kecamatan');
-});
 Route::get('/select-kecamatan', [MkecamatanController::class, 'selectKecamatan'])->name('selectkecamatan');
 Route::get('/select-kota', [MkotaController::class, 'selectKota'])->name('selectkota');
 Route::get('/select-provinsi', [MkecamatanController::class, 'selectProvinsi'])->name('selectprovinsi');
 Route::post('data-kecamatan', [MkecamatanController::class, 'dataKecamatan'])->name('datakecamatan');
 Route::post('data-kota', [MkotaController::class, 'dataKota'])->name('datakota');
 Route::post('data-provinsi', [MkecamatanController::class, 'dataProvinsi'])->name('dataprovinsi');
+Route::resource('kecamatan', MkecamatanController::class);
 Auth::routes();
 
 /*------------------------------------------
