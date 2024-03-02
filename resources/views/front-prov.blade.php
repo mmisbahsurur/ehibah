@@ -89,7 +89,6 @@
                             </thead>
                             <tbody>
                                 @php
-                                    ini_set('max_execution_time', 180);
                                     $totalHibah = [];
                                     foreach ($jenis_hibahs as $key => $jenis_hibah) {
                                         $totalHibah[$key] = 0;

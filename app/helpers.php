@@ -13,6 +13,7 @@ function show_class($path) {
 }
 
 function getHibah($poktan, $jenis_hibah) {
+    ini_set('max_execution_time', 180);
     $hibah = 0;
     foreach ($poktan as $kelompok_tani) {
         $hibahs = App\Models\Hibah::where('id_kelompoktani', $kelompok_tani->id)
