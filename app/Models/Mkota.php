@@ -20,4 +20,9 @@ class Mkota extends Model
     {
         return $this->hasMany(Mkecamatan::class, 'regency_id', 'id');
     }
+
+    public function kelompoktani()
+    {
+        return $this->hasMany(Kelompok::class, 'kota', 'id');
+    }
 }

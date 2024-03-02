@@ -20,4 +20,9 @@ class Mkecamatan extends Model
     {
         return $this->hasMany(Mdesa::class, 'district_id', 'id');
     }
+
+    public function kelompoktani()
+    {
+        return $this->hasMany(Kelompok::class, 'kecamatan', 'id');
+    }
 }

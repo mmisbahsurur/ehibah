@@ -20,7 +20,9 @@ class MkecamatanController extends Controller
      */
     public function index(Request $request)
     {
-        $jenis_hibahs = JenisHibah::all();
+        $jenis_hibahs = JenisHibah::whereNotNull('nama')
+            ->orderBy('nama')
+            ->get();
 
         $countDesa = 0;
         $desas = '';

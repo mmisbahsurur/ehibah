@@ -53,22 +53,26 @@
                         <table id="dataTableExample" class="table">
                             <thead>
                                 <tr>
-                                    <td>ID_Kota</td>
-                                    <td>Kota</td>
-                                    <td>ID Kecamatan</td>
-                                    <td>Kecamatan</td>
-                                    <td>Kelurahan</td>
+                                    <th>ID_Kota</th>
+                                    <th>Kota</th>
+                                    <th>ID Kecamatan</th>
+                                    <th>Kecamatan</th>
+                                    <th>Kelurahan</th>
 
                                     @foreach($jenis_hibahs as $jenis_hibah)
-                                    <td> {{ $jenis_hibah->nama.' - '.$jenis_hibah->satuan }}</td>
+                                    <th> {{ $jenis_hibah->nama.' - '.$jenis_hibah->satuan }}</th>
                                     @endforeach
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($countDesa > 0)
                                 @php
                                     ini_set('max_execution_time', 180);
+                                    $totalHibah = [];
+                                    foreach ($jenis_hibahs as $key => $jenis_hibah) {
+                                        $totalHibah[$key] = 0;
+                                    }
                                 @endphp
+                                @if ($countDesa > 0)
                                 @foreach ($desas as $desa)
                                     <tr>
                                         <td>{{ $desa->kecamatan->regency_id }}</td>
@@ -78,32 +82,22 @@
                                         <td>{{ $desa->name }}</td>
                                         @foreach ($jenis_hibahs as $key => $jenis_hibah)
                                         @php
-                                            $hibah = 0;
+                                            $totalHibah[$key] += getHibah($desa->kelompoktani, $jenis_hibah->id);
                                         @endphp
-                                            @foreach ($desa->kelompoktani as $kelompok_tani)
-                                                @php
-                                                    $hibahs = App\Models\Hibah::where('id_kelompoktani', $kelompok_tani->id)
-                                                        ->where('jenis_hibah', $jenis_hibah->id)
-                                                        ->get();
-                                                @endphp
-                                                @if (count($hibahs) > 0)
-                                                    @foreach ($hibahs as $row)
-                                                    @php
-                                                        $hibah += $row->jumlah;
-                                                    @endphp
-                                                    @endforeach
-                                                @endif
-                                            @endforeach
-                                            <td>{{ number_format($hibah) }}</td>
+                                            <td>{{ number_format(getHibah($desa->kelompoktani, $jenis_hibah->id)) }}</td>
                                         @endforeach
                                     </tr>
                                 @endforeach
-                                @else
-                                <tr>
-                                    <td class="dt-empty">No matching records found</td>
-                                </tr>
                                 @endif
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="5">Total Hibah</th>
+                                    @foreach($jenis_hibahs as $key => $jenis_hibah)
+                                    <th>{{ number_format($totalHibah[$key]) }}</th>
+                                    @endforeach
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

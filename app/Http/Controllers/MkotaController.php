@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hibah;
+use App\Models\JenisHibah;
 use App\Models\Kelompok;
+use App\Models\Mkecamatan;
 use App\Models\Mkota;
 use Illuminate\Http\Request;
 
@@ -14,9 +16,27 @@ class MkotaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $jenis_hibahs = JenisHibah::whereNotNull('nama')
+            ->orderBy('nama')
+            ->get();
+
+        $countKec = 0;
+        $kecamatans = '';
+        if ($request->kota) {
+            $kecamatans = Mkecamatan::select("tbl_kecamatan.*", "tbl_kota.id as idkot", "tbl_kota.name as namakot")
+                ->join("tbl_kota", "tbl_kota.id", "=", "tbl_kecamatan.regency_id")
+                ->where("tbl_kecamatan.regency_id", $request->kota)
+                ->orderBy("tbl_kecamatan.name")
+                ->get();
+            $countKec = $kecamatans->count();
+        }
+        return view('front-kota', compact(
+            'jenis_hibahs',
+            'countKec',
+            'kecamatans',
+        ));
     }
 
     /**
@@ -91,7 +111,7 @@ class MkotaController extends Controller
         $length = $request->limit;
         $name = strtoupper($request->name);
 
-        
+
         //Count Data
         $query = Mkota::where('province_id', 33);
         $query->whereRaw("upper(name) like '%$name%'");

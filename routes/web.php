@@ -10,6 +10,7 @@ use App\Http\Controllers\JenisHibahController;
 use App\Http\Controllers\DependController;
 use App\Http\Controllers\MkecamatanController;
 use App\Http\Controllers\MkotaController;
+use App\Http\Controllers\MProvinsiController;
 
 /*
 
@@ -27,21 +28,17 @@ use App\Http\Controllers\MkotaController;
 Route::get('/', function () {
     return view('front');
 });
-Route::get('/prov', function () {
-    return view('front-prov');
-});
 
-Route::get('/kota', function () {
-    return view('front-kota');
-});
+// Kecamatan
 Route::get('/select-kecamatan', [MkecamatanController::class, 'selectKecamatan'])->name('selectkecamatan');
-Route::get('/select-kota', [MkotaController::class, 'selectKota'])->name('selectkota');
-Route::get('/select-provinsi', [MkecamatanController::class, 'selectProvinsi'])->name('selectprovinsi');
-Route::post('data-kecamatan', [MkecamatanController::class, 'dataKecamatan'])->name('datakecamatan');
-Route::post('data-kota', [MkotaController::class, 'dataKota'])->name('datakota');
-Route::post('data-provinsi', [MkecamatanController::class, 'dataProvinsi'])->name('dataprovinsi');
 Route::resource('kecamatan', MkecamatanController::class);
-Auth::routes();
+
+// Kota
+Route::get('/select-kota', [MkotaController::class, 'selectKota'])->name('selectkota');
+Route::resource('kota', MkotaController::class);
+
+// Provinsi
+Route::resource('prov', MProvinsiController::class);
 
 /*------------------------------------------
 --------------------------------------------
@@ -228,3 +225,5 @@ Route::get('/view-clear', function () {
     Artisan::call('view:clear');
     return 'View cache has been cleared';
 });
+
+Auth::routes();
